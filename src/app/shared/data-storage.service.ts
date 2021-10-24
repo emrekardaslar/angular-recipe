@@ -4,6 +4,7 @@ import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 import { exhaustMap, map, take, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { pipe } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -32,21 +33,19 @@ export class DataStorageService {
       exhaustMap((user) => {
         return this.http.get<Recipe[]>(
           'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/recipes.json',
-          {
-            params: new HttpParams().set('auth', user.token),
-          }
-        );
-      }),
-      map((recipes) => {
-        return recipes.map((recipe) => {
-          return {
-            ...recipe,
-            ingredients: recipe.ingredients ? recipe.ingredients : [],
-          };
-        });
-      }),
-      tap((recipes) => {
-        this.recipeService.setRecipes(recipes);
+        ).pipe(
+          map((recipes) => {
+            return recipes.map((recipe) => {
+              return {
+                ...recipe,
+                ingredients: recipe.ingredients ? recipe.ingredients : [],
+              };
+            });
+          }),
+          tap((recipes) => {
+            this.recipeService.setRecipes(recipes);
+          })
+        )
       })
     );
   }
