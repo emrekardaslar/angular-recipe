@@ -20,9 +20,10 @@ export class DataStorageService {
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
+    const userId = this.authService.user.value.id;
     this.http
       .put(
-        'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/recipes.json',
+        'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/'+userId+'/recipes.json',
         recipes
       )
       .subscribe((response) => {
@@ -35,7 +36,7 @@ export class DataStorageService {
       take(1),
       exhaustMap((user) => {
         return this.http.get<Recipe[]>(
-          'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/recipes.json',
+          'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/'+user.id+'/recipes.json',
         ).pipe(
           map((recipes) => {
             return recipes.map((recipe) => {
@@ -55,13 +56,14 @@ export class DataStorageService {
 
   storeShoppingList() {
     const shoppingList = this.shoppingListService.getIngredients();
+    const userId = this.authService.user.value.id;
     this.http
       .put(
-        'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/shopping-list.json',
+        'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/'+userId+'/shopping-list.json',
         shoppingList
       )
       .subscribe((response) => {
-        console.log(response);
+        console.log(response + 'shopping list');
       });
   }
 
@@ -70,7 +72,7 @@ export class DataStorageService {
       take(1),
       exhaustMap((user) => {
         return this.http.get<Ingredient[]>(
-          'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/shopping-list.json',
+          'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/'+user.id+'/shopping-list.json',
         ).pipe(
           map((shoppingList) => {
             return shoppingList.map((ingredient) => {
