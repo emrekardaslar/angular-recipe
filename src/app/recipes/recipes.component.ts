@@ -7,8 +7,8 @@ import { DataStorageService } from '../shared/data-storage.service';
   styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
-  constructor(private service: DataStorageService) {
-    this.service.fetchRecipes().subscribe();
+  constructor(private dataStorageService: DataStorageService) {
+    this.dataStorageService.fetchRecipes().subscribe();
   }
 
   ngOnInit(): void {

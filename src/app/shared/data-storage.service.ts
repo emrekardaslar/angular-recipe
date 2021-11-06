@@ -4,6 +4,8 @@ import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 import { exhaustMap, map, take, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
+import { Ingredient } from './ingretient.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +14,7 @@ export class DataStorageService {
   constructor(
     private http: HttpClient,
     private recipeService: RecipeService,
+    private shoppingListService: ShoppingListService,
     private authService: AuthService
   ) {}
 
@@ -44,6 +47,40 @@ export class DataStorageService {
           }),
           tap((recipes) => {
             this.recipeService.setRecipes(recipes);
+          })
+        )
+      })
+    );
+  }
+
+  storeShoppingList() {
+    const shoppingList = this.shoppingListService.getIngredients();
+    this.http
+      .put(
+        'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/shopping-list.json',
+        shoppingList
+      )
+      .subscribe((response) => {
+        console.log(response);
+      });
+  }
+
+  fetchShoppingList() {
+    return this.authService.user.pipe(
+      take(1),
+      exhaustMap((user) => {
+        return this.http.get<Ingredient[]>(
+          'https://recipe-angular-b0f5b-default-rtdb.europe-west1.firebasedatabase.app/shopping-list.json',
+        ).pipe(
+          map((shoppingList) => {
+            return shoppingList.map((ingredient) => {
+              return {
+                ...ingredient,
+              };
+            });
+          }),
+          tap((shoppingList) => {
+            this.shoppingListService.setIngredients(shoppingList);
           })
         )
       })
