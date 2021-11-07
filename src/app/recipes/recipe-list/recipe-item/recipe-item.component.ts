@@ -9,10 +9,13 @@ import { Recipe } from '../../recipe.model';
 export class RecipeItemComponent implements OnInit {
   @Input() recipe: Recipe;
   @Input() index: number;
+  @Input() itemsPerPage;
+  @Input() currentPage;
 
   constructor() { }
 
   ngOnInit(): void {
+   this.index = this.itemsPerPage*(this.currentPage-1) + this.index
   }
 
 }

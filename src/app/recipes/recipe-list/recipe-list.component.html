@@ -1,13 +1,19 @@
 <div class="row">
   <div class="col-xs-12">
     <button class="btn btn-success" (click)="onNewRecipe()">New Recipe</button>
+    <input class="form-control" type="text" name="recipeName" [(ngModel)] = "recipeName" (ngModelChange)="onSearch()" style="margin-top: 2em;">
   </div>
 </div>
 <hr />
+
 <div class="row">
   <div class="col-xs-12">
-    <app-recipe-item *ngFor="let recipeEl of recipes; let i = index"
+    <app-recipe-item *ngFor="let recipeEl of recipes | paginate: { itemsPerPage: itemsPerPage, currentPage: p };  let i=index;"
     [recipe]="recipeEl"
-    [index]="i"></app-recipe-item>
+    [index]="i"
+    [itemsPerPage]="itemsPerPage"
+    [currentPage]="p"></app-recipe-item>
   </div>
 </div>
+
+<pagination-controls (pageChange)=pageChanged($event)></pagination-controls>

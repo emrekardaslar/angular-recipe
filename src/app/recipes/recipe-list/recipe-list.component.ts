@@ -13,6 +13,9 @@ import { RecipeService } from '../recipe.service';
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
   subscribtion: Subscription;
+  recipeName: string;
+  p: number = 1;
+  itemsPerPage: number = 3;
 
   constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute ) {}
 
@@ -28,7 +31,18 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
+  onSearch() {
+    if (this.recipeName == '')
+      this.recipes = this.recipeService.getRecipes();
+    else
+      this.recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().includes(this.recipeName.toLowerCase()));
+  }
+
   ngOnDestroy(): void {
     this.subscribtion.unsubscribe();
+  }
+
+  pageChanged(event: any): void {
+    this.p = event;
   }
 }
