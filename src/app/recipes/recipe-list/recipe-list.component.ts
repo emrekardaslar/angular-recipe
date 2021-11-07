@@ -32,6 +32,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
+    this.p = 1;
     if (this.recipeName == '')
       this.recipes = this.recipeService.getRecipes();
     else
