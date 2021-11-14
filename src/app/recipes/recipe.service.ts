@@ -7,6 +7,7 @@ import { Recipe } from "./recipe.model";
 @Injectable()
 export class RecipeService {
     recipesChanged = new Subject<Recipe[]>();
+    indexArray: number[] = [];
     /*
     recipes: Recipe[] = [
         new Recipe(
@@ -64,5 +65,23 @@ export class RecipeService {
     deleteRecipe(index: number) {
         this.recipes.splice(index, 1);
         this.recipesChanged.next(this.recipes.slice());
+    }
+
+    getIndexByName(name: string) {
+        let res = -1;
+        this.recipes.forEach((recipe, index) => {
+            if (recipe.name === name) {
+                res = index;
+            }
+        });
+        return res;
+    }
+
+    setIndexArray(indexArray) {
+        this.indexArray = indexArray;
+    }
+
+    getIndexArray() {
+        return this.indexArray.slice();
     }
 }

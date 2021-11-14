@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -16,6 +16,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   recipeName: string;
   p: number = 1;
   itemsPerPage: number = 3;
+  searchIndex: number = -1;
+  indexesArray = [];
+  firstTime = true;
+  searchIndexes: number[] = [];
 
   constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute ) {}
 
@@ -33,10 +37,47 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   onSearch() {
     this.p = 1;
-    if (this.recipeName == '')
+    this.searchIndex = -1;
+    if (this.recipeName == '')  {
       this.recipes = this.recipeService.getRecipes();
-    else
-      this.recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().includes(this.recipeName.toLowerCase()));
+      this.searchIndexes = [];
+      this.firstTime = true;
+      this.searchIndex = -1;
+      return;
+    }
+
+    if (this.recipeName == '' && !this.firstTime) {
+      console.log('first time')
+      this.recipeService.setIndexArray([]);
+    }
+
+    else {
+     this.recipes.forEach(
+       (recipe, index) => {
+         if (recipe.name.toLowerCase().includes(this.recipeName.toLowerCase())) {
+          this.indexesArray.push(index);
+          this.recipeService.setIndexArray(this.indexesArray);
+         }  
+     });
+
+     this.recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().includes(this.recipeName.toLowerCase()));
+      if (this.recipes.length == 1) {
+        this.searchIndex = this.recipeService.getRecipes().findIndex(recipe => recipe.name.toLowerCase().includes(this.recipeName.toLowerCase()));
+        this.searchIndexes = this.findIndexes(this.recipes);
+      }
+      else
+        this.searchIndexes = this.findIndexes(this.recipes);
+    }
+
+    this.firstTime = false;
+  }
+
+  findIndexes(recipeArray: Recipe[]) {
+    let indexes: number[] = [];
+    recipeArray.forEach(recipe => {
+      indexes.push(this.recipeService.getIndexByName(recipe.name));
+    });
+    return indexes;
   }
 
   ngOnDestroy(): void {
