@@ -13,10 +13,12 @@ export class RecipeItemComponent implements OnInit, OnChanges {
   @Input() itemsPerPage;
   @Input() currentPage;
   @Input() searchIndexes;
+  description: string;
 
   constructor(private recipeService: RecipeService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.description = this.recipe.description.replace(/<\/?[^>]+(>|$)|&nbsp;/g, " ").substring(0, 50);
     if (this.searchIndexes.length == 0) {
      this.index = this.itemsPerPage*(this.currentPage-1) + this.index
      return;

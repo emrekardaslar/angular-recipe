@@ -44,12 +44,11 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea
-              class="form-control"
+            <quill-editor
+              [styles]="{height: '200px'}" 
               formControlName="description"
               id="description"
-              rows="3"
-            ></textarea>
+            ></quill-editor>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { NgxPaginationModule } from "ngx-pagination";
+import { QuillModule } from "ngx-quill";
 import { SharedModule } from "../shared/shared.module";
 import { RecipeDetailComponent } from "./recipe-detail/recipe-detail.component";
 import { RecipeEditComponent } from "./recipe-edit/recipe-edit.component";
@@ -27,7 +28,8 @@ import { RecipesComponent } from "./recipes.component";
       ReactiveFormsModule,
       RecipesRoutingModule,
       NgxPaginationModule,
-      FormsModule
+      FormsModule,
+      QuillModule.forRoot(),
     ],
   })
 export class RecipesModule {}
