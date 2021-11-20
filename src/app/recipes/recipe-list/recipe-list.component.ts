@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { RecipeService } from '../recipe.service';
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
   subscribtion: Subscription;
-  recipeName: string;
+  recipeName: string = '';
   p: number = 1;
   itemsPerPage: number = 3;
   indexesArray = [];
@@ -24,6 +24,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribtion = this.recipeService.recipesChanged.subscribe(
       (recipes: Recipe[]) => {
+        if (this.recipeName == '') 
         this.recipes = recipes;
       });
     this.recipes = this.recipeService.getRecipes();
