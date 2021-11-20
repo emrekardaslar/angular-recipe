@@ -43,14 +43,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     }
 
     else {
-     this.recipes.forEach(
-       (recipe, index) => {
-         if (recipe.name.toLowerCase().includes(this.recipeName.toLowerCase())) {
-          this.indexesArray.push(index);
-          this.recipeService.setIndexArray(this.indexesArray);
-         }  
-     });
-
      this.recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().includes(this.recipeName.toLowerCase()));
      this.searchIndexes = this.findIndexes(this.recipes);
     }

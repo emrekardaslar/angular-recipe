@@ -76,12 +76,4 @@ export class RecipeService {
         });
         return res;
     }
-
-    setIndexArray(indexArray) {
-        this.indexArray = indexArray;
-    }
-
-    getIndexArray() {
-        return this.indexArray.slice();
-    }
 }
