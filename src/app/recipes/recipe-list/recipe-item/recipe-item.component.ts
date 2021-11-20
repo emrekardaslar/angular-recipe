@@ -12,34 +12,32 @@ export class RecipeItemComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() itemsPerPage;
   @Input() currentPage;
-  @Input() searchIndex;
   @Input() searchIndexes;
 
   constructor(private recipeService: RecipeService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.searchIndexes.length == 0) {
+     this.index = this.itemsPerPage*(this.currentPage-1) + this.index
+     return;
+    }
+
     if (this.searchIndexes.length == 1) {
-      this.index = this.searchIndex;
+      this.index = this.searchIndexes[0];
       return;
     }
     
     if (this.searchIndexes.length > 0) {
-        this.searchIndex = this.searchIndexes[this.index];
+        let subArr = this.searchIndexes.slice((this.currentPage-1) * this.itemsPerPage, this.searchIndexes.length);
+        let idxForward = (this.currentPage-1) * this.itemsPerPage;
+         if (idxForward > 0) {
+           this.index = subArr[this.index];
+           return;
+         }
+         else {
+          this.index = this.searchIndexes[this.index];
+         }
     }
-
-    if (this.searchIndex !== -1) {
-      let idxForward = (this.currentPage-1)*this.itemsPerPage;
-      if (idxForward > 0) {
-        this.index = this.searchIndexes[idxForward];
-        return;
-      }
-      this.index = this.searchIndex;
-    }
-      
-    else {
-      this.index = this.itemsPerPage*(this.currentPage-1) + this.index
-    } 
   }
-
   ngOnInit(): void {}
 }
