@@ -1,4 +1,4 @@
-# RecipeProject
+# Recipe Book Project
 
 This project was inspired by [recipe book](https://github.com/mschwarzmueller/RecipeBook) project. The project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.3.
 
