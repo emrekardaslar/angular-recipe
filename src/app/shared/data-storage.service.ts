@@ -6,6 +6,7 @@ import { exhaustMap, map, take, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Ingredient } from './ingretient.model';
+import emailjs from 'emailjs-com';
 
 @Injectable({
   providedIn: 'root',
@@ -88,4 +89,27 @@ export class DataStorageService {
       })
     );
   }
+
+  sendEmail(content) {
+    let message = '';
+    console.log(content);
+    content.forEach(element => {
+      message += element.name + ' ' + element.amount + '\n';
+    });
+
+    var templateParams = {
+      user_email: this.authService.user.value.email,
+      name: 'Recipe Service Book',
+      message: message,
+    };
+
+  console.log(templateParams);
+    emailjs.send('serviceid','templateid', templateParams, 'user_id').then(
+      (res) => {
+        if (res.status == 200) {
+          alert('Email sent successfully');
+        }
+      }
+    ).catch(err => console.log(err));
+  } 
 }

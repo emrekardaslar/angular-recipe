@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
@@ -60,5 +60,12 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.shoppingListService.deleteIngredient(this.editedItemIndex);
     this.dataStorageService.storeShoppingList();
     this.onClear();
+  }
+
+  onSendEmail(){
+    const formEl = document.getElementById('emailForm') as HTMLFormElement;
+    this.dataStorageService.fetchShoppingList().subscribe(
+      res => this.dataStorageService.sendEmail(res)
+    );
   }
 }
